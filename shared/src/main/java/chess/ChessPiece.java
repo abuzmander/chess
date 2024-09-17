@@ -10,8 +10,14 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
+    private ChessGame.TeamColor mycolor;
+    private PieceType mytype;
+
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        mycolor = pieceColor;
+        mytype = type;
+
     }
 
     /**
@@ -30,14 +36,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        return mycolor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return mytype;
     }
 
     /**
@@ -48,6 +54,12 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        if (getPieceType() == ChessPiece.PieceType.BISHOP) {
+            System.out.print(mytype);
+            ArrayList<ChessPosition> moves = new ArrayList<ChessPosition>();
+            while
+            board.getPiece()
+        }
         return new ArrayList<>();
     }
 }
