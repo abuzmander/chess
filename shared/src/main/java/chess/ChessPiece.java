@@ -1,7 +1,7 @@
 package chess;
 
-import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.*;
 
 /**
  * Represents a single chess piece
@@ -10,14 +10,13 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    private ChessGame.TeamColor mycolor;
-    private PieceType mytype;
+    protected ChessGame.TeamColor myColor;
+    protected PieceType myType;
 
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
-        mycolor = pieceColor;
-        mytype = type;
-
+        myColor = pieceColor;
+        myType = type;
     }
 
     /**
@@ -36,14 +35,56 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        return mycolor;
+        return myColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        return mytype;
+        return myType;
+    }
+
+    /**
+     * returns when
+     *
+     * @param board
+     * @param myPosition
+     * @param rowDir
+     * @param colDir
+     * @return moves
+     */
+    public Collection<ChessMove> checkLine(ChessBoard board, ChessPosition myPosition, int rowDir, int colDir) {
+        List<ChessMove> moves = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            int nextRow = i * rowDir + myPosition.getRow();
+            int nextCol = i * colDir + myPosition.getColumn();
+            Optional<ChessMove> optNextMove = checkMove(board, myPosition, nextRow, nextCol, true,
+                    null);
+            if (optNextMove.isEmpty()) {
+                return moves;
+            } else {
+                moves.add(optNextMove.get());
+                if (board.getPiece(optNextMove.get().getEndPosition()) != null) {
+                    return moves;
+                }
+            }
+        }
+        return moves;
+    }
+
+    public Optional<ChessMove> checkMove(ChessBoard board, ChessPosition myPosition, int rowCheck,
+                                         int colCheck, boolean canTake, ChessPiece.PieceType promo) {
+        ChessPosition endPos = new ChessPosition(rowCheck, colCheck);
+        if (8 < rowCheck || 8 < colCheck || rowCheck < 1 || colCheck < 1) {
+            return Optional.empty();
+        }
+        if (board.getPiece(endPos) != null) {
+            if (board.getPiece(endPos).getTeamColor() == myColor) {
+                return Optional.empty();
+            }
+        }
+        return Optional.of(new ChessMove(myPosition, endPos, promo));
     }
 
     /**
@@ -54,12 +95,37 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        if (getPieceType() == ChessPiece.PieceType.BISHOP) {
-            System.out.print(mytype);
-            ArrayList<ChessPosition> moves = new ArrayList<ChessPosition>();
-            while
-            board.getPiece()
+        List<ChessMove> moves = new ArrayList<>();
+        if (getPieceType() == PieceType.BISHOP) {
+            // Checks the line in the positive positive direction
+            moves.addAll(checkLine(board, myPosition, 1, 1));
+            // Checks the line in the positive negative direction
+            moves.addAll(checkLine(board, myPosition, 1, -1));
+            // Checks the line in the negative positive direction
+            moves.addAll(checkLine(board, myPosition, -1, 1));
+            // Checks the line in the negative negative direction
+            moves.addAll(checkLine(board, myPosition, -1, -1));
         }
-        return new ArrayList<>();
+//        if (getPieceType() == PieceType.QUEEN) {
+//            // Checks the line in the positive positive direction
+//            moves.addAll(checkLine(board, myPosition, 1, 1));
+//            // Checks the line in the positive negative direction
+//            moves.addAll(checkLine(board, myPosition, 1, -1));
+//            // Checks the line in the negative positive direction
+//            moves.addAll(checkLine(board, myPosition, -1, 1));
+//            // Checks the line in the negative negative direction
+//            moves.addAll(checkLine(board, myPosition, -1, -1));
+//
+//            // Checks the line in the 0 positive direction
+//            moves.addAll(checkLine(board, myPosition, 0, 1));
+//            // Checks the line in the 0 negative direction
+//            moves.addAll(checkLine(board, myPosition, 0, -1));
+//            // Checks the line in the negative positive direction
+//            moves.addAll(checkLine(board, myPosition, -1, 0));
+//            // Checks the line in the negative negative direction
+//            moves.addAll(checkLine(board, myPosition, -1, 0));
+//        }
+        return moves;
+
     }
 }

@@ -18,8 +18,26 @@ public class TestUtilities {
 
     static public void validateMoves(ChessBoard board, ChessPiece testPiece, ChessPosition startPosition, Set<ChessMove> validMoves) {
         var pieceMoves = new HashSet<>(testPiece.pieceMoves(board, startPosition));
-        assertCollectionsEquals(validMoves, pieceMoves, "Wrong moves");
+        // TODO: REVERT assertCollectionsEquals(validMoves, pieceMoves, "Wrong moves");
+        assertCollectionsEquals(validMoves, pieceMoves, "Wrong moves. "
+                + "Extras: " + extras(validMoves, pieceMoves)
+                + "Missing: " + missing(validMoves, pieceMoves)
+        );
     }
+
+    // TODO: Get rid of following 2 methods
+    static private Set<ChessMove> extras(Collection<ChessMove> validMoves, Collection<ChessMove> pieceMoves) {
+        var result = new HashSet<>(pieceMoves);
+        result.removeAll(validMoves);
+        return result;
+    }
+
+    static private Set<ChessMove> missing(Collection<ChessMove> validMoves, Collection<ChessMove> pieceMoves) {
+        var result = new HashSet<>(validMoves);
+        result.removeAll(pieceMoves);
+        return result;
+    }
+    // END NEW STUFF
 
     static public <T> void assertCollectionsEquals(Collection<T> first, Collection<T> second, String message) {
         Assertions.assertEquals(new HashSet<>(first), new HashSet<>(second), message);
