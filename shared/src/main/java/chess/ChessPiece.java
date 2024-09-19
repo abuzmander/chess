@@ -106,25 +106,35 @@ public class ChessPiece {
             // Checks the line in the negative negative direction
             moves.addAll(checkLine(board, myPosition, -1, -1));
         }
-//        if (getPieceType() == PieceType.QUEEN) {
-//            // Checks the line in the positive positive direction
-//            moves.addAll(checkLine(board, myPosition, 1, 1));
-//            // Checks the line in the positive negative direction
-//            moves.addAll(checkLine(board, myPosition, 1, -1));
-//            // Checks the line in the negative positive direction
-//            moves.addAll(checkLine(board, myPosition, -1, 1));
-//            // Checks the line in the negative negative direction
-//            moves.addAll(checkLine(board, myPosition, -1, -1));
-//
-//            // Checks the line in the 0 positive direction
-//            moves.addAll(checkLine(board, myPosition, 0, 1));
-//            // Checks the line in the 0 negative direction
-//            moves.addAll(checkLine(board, myPosition, 0, -1));
-//            // Checks the line in the negative positive direction
-//            moves.addAll(checkLine(board, myPosition, -1, 0));
-//            // Checks the line in the negative negative direction
-//            moves.addAll(checkLine(board, myPosition, -1, 0));
-//        }
+        if (getPieceType() == PieceType.ROOK) {
+            // Checks the line in the 0 positive direction
+            moves.addAll(checkLine(board, myPosition, 0, 1));
+            // Checks the line in the 0 negative direction
+            moves.addAll(checkLine(board, myPosition, 0, -1));
+            // Checks the line in the negative positive direction
+            moves.addAll(checkLine(board, myPosition, 1, 0));
+            // Checks the line in the negative negative direction
+            moves.addAll(checkLine(board, myPosition, -1, 0));
+        }
+        if (getPieceType() == PieceType.QUEEN) {
+            // Checks the line in the positive positive direction
+            moves.addAll(checkLine(board, myPosition, 1, 1));
+            // Checks the line in the positive negative direction
+            moves.addAll(checkLine(board, myPosition, 1, -1));
+            // Checks the line in the negative positive direction
+            moves.addAll(checkLine(board, myPosition, -1, 1));
+            // Checks the line in the negative negative direction
+            moves.addAll(checkLine(board, myPosition, -1, -1));
+
+            // Checks the line in the 0 positive direction
+            moves.addAll(checkLine(board, myPosition, 0, 1));
+            // Checks the line in the 0 negative direction
+            moves.addAll(checkLine(board, myPosition, 0, -1));
+            // Checks the line in the negative positive direction
+            moves.addAll(checkLine(board, myPosition, 1, 0));
+            // Checks the line in the negative negative direction
+            moves.addAll(checkLine(board, myPosition, -1, 0));
+        }
         return moves;
 
     }
