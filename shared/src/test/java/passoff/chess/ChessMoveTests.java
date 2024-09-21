@@ -73,7 +73,6 @@ public class ChessMoveTests {
         Assertions.assertFalse(set.contains(promoteDifferent));
         set.add(promoteDifferent);
         Assertions.assertEquals(4, set.size());
-
     }
 
 }

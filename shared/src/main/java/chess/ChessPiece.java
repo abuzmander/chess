@@ -19,6 +19,18 @@ public class ChessPiece {
         myType = type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPiece that)) return false;
+        return myColor == that.myColor && myType == that.myType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myColor, myType);
+    }
+
     /**
      * The various different chess piece options
      */
@@ -43,6 +55,14 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return myType;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "myColor=" + myColor +
+                ", myType=" + myType +
+                '}';
     }
 
     /**
