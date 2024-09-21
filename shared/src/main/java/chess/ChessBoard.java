@@ -34,7 +34,7 @@ public class ChessBoard {
                 "squares=" + Arrays.deepToString(squares) +
                 '}';
     }
-    
+
     /**
      * Adds a chess piece to the chessboard
      *

@@ -169,104 +169,73 @@ public class ChessPiece {
         }
         // King Moves
         if (getPieceType() == PieceType.KING) {
-            // Checks the line in the positive positive direction
-            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()-1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()-1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
+            // Checks the diagonal directions
+            checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() -1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() -1, CaptureType.ANY).ifPresent(moves::add);
 
-            // Checks the line in the positive positive direction
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() +1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn()-1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-
+            // Checks the straight directions
+            checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() +1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() -1, CaptureType.ANY).ifPresent(moves::add);
         }
 
-        // King Moves
+        // KNIGHT Moves
         if (getPieceType() == PieceType.KNIGHT) {
-            // Checks the line in the positive positive direction
-            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn() +1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()-1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn() +1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()-1, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-
-            // Checks the line in the positive positive direction
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 2, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +2, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow() +1, myPosition.getColumn() -2, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
-            //
-            move = checkMove(board, myPosition, myPosition.getRow()-1, myPosition.getColumn()-2, CaptureType.ANY
-            );
-            move.ifPresent(moves::add);
+            // Checks the knight positions
+            checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn() +1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()-1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn() +1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()-1, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 2, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +2, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow() +1, myPosition.getColumn() -2, CaptureType.ANY).ifPresent(moves::add);
+            checkMove(board, myPosition, myPosition.getRow()-1, myPosition.getColumn()-2, CaptureType.ANY).ifPresent(moves::add);
 
         }
+
+        // PAWN Moves
         if (getPieceType() == PieceType.PAWN) {
             boolean canPromote = false;
+            // Gets the Pawn Moves when the PAWN is WHITE
             if(getTeamColor() == ChessGame.TeamColor.WHITE) {
+                // Checks to see if we are right before the promotion row
                 canPromote = myPosition.getRow() == 7;
 
+                // Checks our forward movement
                 Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), CaptureType.CANT_TAKE);
                 move.ifPresent(moves::add);
+
+                // If we haven't moved from our starting position and we can move forward 1 then we check our opening 2 move
                 if(myPosition.getRow() == 2 && move.isPresent()){
                     checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn(), CaptureType.CANT_TAKE).ifPresent(moves::add);
                 }
+
+                // Checks our Pawn attacking moves
                 checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, CaptureType.MUST_TAKE).ifPresent(moves::add);
                 checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() -1, CaptureType.MUST_TAKE).ifPresent(moves::add);
 
             }
+            // Gets the Pawn Moves when the PAWN is BLACK
             else if (getTeamColor() == ChessGame.TeamColor.BLACK) {
+                // Checks to see if we are right before the promotion row
                 canPromote = myPosition.getRow() == 2;
 
+                // Checks our forward movement
                 Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), CaptureType.CANT_TAKE);
                 move.ifPresent(moves::add);
+
+                // If we haven't moved from our starting position and we can move forward 1 then we check our opening 2 move
                 if(myPosition.getRow() == 7 && move.isPresent()){
                     checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn(), CaptureType.CANT_TAKE).ifPresent(moves::add);
                 }
+                // Checks our Pawn attacking moves
                 checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, CaptureType.MUST_TAKE).ifPresent(moves::add);
                 checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() -1, CaptureType.MUST_TAKE).ifPresent(moves::add);
             }
+            // If we can promote then we change our moves to promotion moves
             if (canPromote){
                 moves = moves.stream().flatMap(ChessPiece::streamPromotions).collect(Collectors.toList());
             }
