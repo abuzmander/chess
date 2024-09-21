@@ -16,6 +16,25 @@ public class ChessBoard {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessBoard that)) return false;
+        return Objects.deepEquals(squares, that.squares);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(squares);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessBoard{" +
+                "squares=" + Arrays.deepToString(squares) +
+                '}';
+    }
+    
     /**
      * Adds a chess piece to the chessboard
      *
@@ -36,13 +55,6 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
 
         return squares[position.getRow()-1][position.getColumn()-1];
-    }
-
-    @Override
-    public String toString() {
-        return "ChessBoard{" +
-                "squares=" + Arrays.deepToString(squares) +
-                '}';
     }
 
     /**
@@ -100,17 +112,5 @@ public class ChessBoard {
 
             }
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessBoard that)) return false;
-        return Objects.deepEquals(squares, that.squares);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(squares);
     }
 }
