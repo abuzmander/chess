@@ -96,6 +96,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         List<ChessMove> moves = new ArrayList<>();
+        //Bishop Moves
         if (getPieceType() == PieceType.BISHOP) {
             // Checks the line in the positive positive direction
             moves.addAll(checkLine(board, myPosition, 1, 1));
@@ -106,16 +107,18 @@ public class ChessPiece {
             // Checks the line in the negative negative direction
             moves.addAll(checkLine(board, myPosition, -1, -1));
         }
+        //Rook Moves
         if (getPieceType() == PieceType.ROOK) {
             // Checks the line in the 0 positive direction
             moves.addAll(checkLine(board, myPosition, 0, 1));
             // Checks the line in the 0 negative direction
             moves.addAll(checkLine(board, myPosition, 0, -1));
-            // Checks the line in the negative positive direction
+            // Checks the line in the positive  0 positive direction
             moves.addAll(checkLine(board, myPosition, 1, 0));
-            // Checks the line in the negative negative direction
+            // Checks the line in the negative 0 direction
             moves.addAll(checkLine(board, myPosition, -1, 0));
         }
+        // Queen Moves
         if (getPieceType() == PieceType.QUEEN) {
             // Checks the line in the positive positive direction
             moves.addAll(checkLine(board, myPosition, 1, 1));
@@ -130,10 +133,85 @@ public class ChessPiece {
             moves.addAll(checkLine(board, myPosition, 0, 1));
             // Checks the line in the 0 negative direction
             moves.addAll(checkLine(board, myPosition, 0, -1));
-            // Checks the line in the negative positive direction
+            // Checks the line in the positive 0 direction
             moves.addAll(checkLine(board, myPosition, 1, 0));
-            // Checks the line in the negative negative direction
+            // Checks the line in the negative 0 direction
             moves.addAll(checkLine(board, myPosition, -1, 0));
+        }
+        // King Moves
+        if (getPieceType() == PieceType.KING) {
+            // Checks the line in the positive positive direction
+            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()-1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()-1, true,
+                    null);
+            move.ifPresent(moves::add);
+
+            // Checks the line in the positive positive direction
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() +1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn()-1, true,
+                    null);
+            move.ifPresent(moves::add);
+
+        }
+
+        // King Moves
+        if (getPieceType() == PieceType.KNIGHT) {
+            // Checks the line in the positive positive direction
+            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn() +1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()-1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn() +1, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()-1, true,
+                    null);
+            move.ifPresent(moves::add);
+
+            // Checks the line in the positive positive direction
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 2, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +2, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow() +1, myPosition.getColumn() -2, true,
+                    null);
+            move.ifPresent(moves::add);
+            //
+            move = checkMove(board, myPosition, myPosition.getRow()-1, myPosition.getColumn()-2, true,
+                    null);
+            move.ifPresent(moves::add);
+
         }
         return moves;
 
