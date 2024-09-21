@@ -2,6 +2,8 @@ package chess;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Represents a single chess piece
@@ -25,10 +27,16 @@ public class ChessPiece {
         if (!(o instanceof ChessPiece that)) return false;
         return myColor == that.myColor && myType == that.myType;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(myColor, myType);
+    }
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "myColor=" + myColor +
+                ", myType=" + myType +
+                '}';
     }
 
     /**
@@ -41,6 +49,12 @@ public class ChessPiece {
         KNIGHT,
         ROOK,
         PAWN
+    }
+
+    public enum CaptureType {
+        ANY,
+        CANT_TAKE,
+        MUST_TAKE
     }
 
     /**
@@ -57,13 +71,6 @@ public class ChessPiece {
         return myType;
     }
 
-    @Override
-    public String toString() {
-        return "ChessPiece{" +
-                "myColor=" + myColor +
-                ", myType=" + myType +
-                '}';
-    }
 
     /**
      * returns when
@@ -79,8 +86,8 @@ public class ChessPiece {
         for (int i = 1; i <= 8; i++) {
             int nextRow = i * rowDir + myPosition.getRow();
             int nextCol = i * colDir + myPosition.getColumn();
-            Optional<ChessMove> optNextMove = checkMove(board, myPosition, nextRow, nextCol, true,
-                    null);
+            Optional<ChessMove> optNextMove = checkMove(board, myPosition, nextRow, nextCol, CaptureType.ANY
+            );
             if (optNextMove.isEmpty()) {
                 return moves;
             } else {
@@ -94,17 +101,19 @@ public class ChessPiece {
     }
 
     public Optional<ChessMove> checkMove(ChessBoard board, ChessPosition myPosition, int rowCheck,
-                                         int colCheck, boolean canTake, ChessPiece.PieceType promo) {
+                                         int colCheck, CaptureType captureType) {
         ChessPosition endPos = new ChessPosition(rowCheck, colCheck);
         if (8 < rowCheck || 8 < colCheck || rowCheck < 1 || colCheck < 1) {
             return Optional.empty();
         }
         if (board.getPiece(endPos) != null) {
-            if (board.getPiece(endPos).getTeamColor() == myColor) {
+            if (board.getPiece(endPos).getTeamColor() == myColor || captureType == CaptureType.CANT_TAKE) {
                 return Optional.empty();
             }
+        } else if (captureType == CaptureType.MUST_TAKE) {
+            return Optional.empty();
         }
-        return Optional.of(new ChessMove(myPosition, endPos, promo));
+        return Optional.of(new ChessMove(myPosition, endPos, null));
     }
 
     /**
@@ -161,37 +170,37 @@ public class ChessPiece {
         // King Moves
         if (getPieceType() == PieceType.KING) {
             // Checks the line in the positive positive direction
-            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, true,
-                    null);
+            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()-1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn()-1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()-1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn()-1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
 
             // Checks the line in the positive positive direction
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() +1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn() +1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn()-1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow(), myPosition.getColumn()-1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
 
         }
@@ -199,41 +208,77 @@ public class ChessPiece {
         // King Moves
         if (getPieceType() == PieceType.KNIGHT) {
             // Checks the line in the positive positive direction
-            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn() +1, true,
-                    null);
+            Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn() +1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()-1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn()-1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn() +1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn() +1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()-1, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn()-1, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
 
             // Checks the line in the positive positive direction
-            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 2, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() + 2, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +2, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +2, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow() +1, myPosition.getColumn() -2, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow() +1, myPosition.getColumn() -2, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
             //
-            move = checkMove(board, myPosition, myPosition.getRow()-1, myPosition.getColumn()-2, true,
-                    null);
+            move = checkMove(board, myPosition, myPosition.getRow()-1, myPosition.getColumn()-2, CaptureType.ANY
+            );
             move.ifPresent(moves::add);
 
         }
-        return moves;
+        if (getPieceType() == PieceType.PAWN) {
+            boolean canPromote = false;
+            if(getTeamColor() == ChessGame.TeamColor.WHITE) {
+                canPromote = myPosition.getRow() == 7;
 
+                Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn(), CaptureType.CANT_TAKE);
+                move.ifPresent(moves::add);
+                if(myPosition.getRow() == 2 && move.isPresent()){
+                    checkMove(board, myPosition, myPosition.getRow() + 2, myPosition.getColumn(), CaptureType.CANT_TAKE).ifPresent(moves::add);
+                }
+                checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() +1, CaptureType.MUST_TAKE).ifPresent(moves::add);
+                checkMove(board, myPosition, myPosition.getRow() + 1, myPosition.getColumn() -1, CaptureType.MUST_TAKE).ifPresent(moves::add);
+
+            }
+            else if (getTeamColor() == ChessGame.TeamColor.BLACK) {
+                canPromote = myPosition.getRow() == 2;
+
+                Optional<ChessMove> move = checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn(), CaptureType.CANT_TAKE);
+                move.ifPresent(moves::add);
+                if(myPosition.getRow() == 7 && move.isPresent()){
+                    checkMove(board, myPosition, myPosition.getRow() - 2, myPosition.getColumn(), CaptureType.CANT_TAKE).ifPresent(moves::add);
+                }
+                checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() +1, CaptureType.MUST_TAKE).ifPresent(moves::add);
+                checkMove(board, myPosition, myPosition.getRow() - 1, myPosition.getColumn() -1, CaptureType.MUST_TAKE).ifPresent(moves::add);
+            }
+            if (canPromote){
+                moves = moves.stream().flatMap(ChessPiece::streamPromotions).collect(Collectors.toList());
+            }
+        }
+        return moves;
+    }
+    public static Stream<ChessMove> streamPromotions(ChessMove move){
+        return Stream.of(
+                new ChessMove(move, PieceType.QUEEN),
+                new ChessMove(move, PieceType.BISHOP),
+                new ChessMove(move, PieceType.ROOK),
+                new ChessMove(move, PieceType.KNIGHT)
+        );
     }
 }

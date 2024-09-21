@@ -20,12 +20,29 @@ public class ChessMove {
         this.promotionPiece = promotionPiece;
 
     }
+    public ChessMove(ChessMove oldMove, ChessPiece.PieceType promotionPiece){
+        this.startPosition = oldMove.startPosition;
+        this.endPosition = oldMove.endPosition;
+        this.promotionPiece = promotionPiece;
+    }
 
     @Override
     public String toString() {
-        return //"Start Position: " + startPosition +
-                " End Position: " + endPosition;
-        //+ " Promotion Piece: " + promotionPiece;
+        return "Start Position: " + startPosition +
+                " End Position: " + endPosition
+                + " Promotion Piece: " + promotionPiece;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessMove chessMove)) return false;
+        return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition,
+                chessMove.endPosition) && promotionPiece == chessMove.promotionPiece;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startPosition, endPosition, promotionPiece);
     }
 
 
@@ -51,19 +68,5 @@ public class ChessMove {
      */
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessMove chessMove)) return false;
-        return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition,
-                chessMove.endPosition) && promotionPiece == chessMove.promotionPiece;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startPosition, endPosition, promotionPiece);
     }
 }
