@@ -79,6 +79,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPosition start = move.getStartPosition();
+        ChessPosition end = move.getEndPosition();
         ChessPiece piece = board.getPiece(start);
         if(piece.getTeamColor() != turn){
           throw new InvalidMoveException("Invalid Move: Moving the Wrong Team Color");
@@ -86,13 +87,21 @@ public class ChessGame {
         boolean isValidMove = false;
         Collection <ChessMove> validMoves = validMoves(start);
         for(ChessMove validMove : validMoves){
-            if (validMove == move) {
+            if (validMove.equals(move)) {
                 isValidMove = true;
                 break;
             }
         }
         if(!isValidMove){
             throw new InvalidMoveException("Invalid Move: Not a real move for the piece");
+        }
+        board.addPiece(start, null);
+        board.addPiece(end, piece);
+        if(turn == TeamColor.WHITE){
+            turn = TeamColor.BLACK;
+        }
+        else{
+            turn = TeamColor.BLACK;
         }
     }
 
