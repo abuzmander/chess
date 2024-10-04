@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -77,8 +78,10 @@ public class ChessGame {
             for(int j = 1; j < 9; j++){
                 ChessPosition currPosition = new ChessPosition(i, j);
                 ChessPiece currPiece =board.getPiece(currPosition);
-                if (currPiece.getPieceType() == ChessPiece.PieceType.KING && currPiece.getTeamColor() == teamColor){
-                    return currPosition;
+                if(currPiece != null) {
+                    if (currPiece.getPieceType() == ChessPiece.PieceType.KING && currPiece.getTeamColor() == teamColor) {
+                        return currPosition;
+                    }
                 }
             }
         }
@@ -87,7 +90,24 @@ public class ChessGame {
 
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKingPosition(teamColor);
-        throw new RuntimeException("Not implemented");
+        System.out.println("King Position = " + kingPosition);
+        for(int i = 1; i < 9; i ++) {
+            for (int j = 1; j < 9; j++) {
+                ChessPosition currPosition = new ChessPosition(i, j);
+                ChessPiece currPiece =board.getPiece(currPosition);
+                if(currPiece != null) {
+                    if (currPiece.getTeamColor() != teamColor) {
+                        Collection<ChessMove> moves = currPiece.pieceMoves(board, currPosition);
+                        for (ChessMove move : moves) {
+                            if (move.getEndPosition().equals(kingPosition)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
