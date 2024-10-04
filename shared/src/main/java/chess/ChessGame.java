@@ -11,6 +11,10 @@ import java.util.Collection;
 public class ChessGame {
     private ChessBoard board;
     private TeamColor turn;
+    private ChessPosition whiteKing;
+    private ChessPosition blackKing;
+
+
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard();
@@ -68,7 +72,21 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+    private ChessPosition findKingPosition(TeamColor teamColor){
+        for(int i = 1; i < 9; i ++){
+            for(int j = 1; j < 9; j++){
+                ChessPosition currPosition = new ChessPosition(i, j);
+                ChessPiece currPiece =board.getPiece(currPosition);
+                if (currPiece.getPieceType() == ChessPiece.PieceType.KING && currPiece.getTeamColor() == teamColor){
+                    return currPosition;
+                }
+            }
+        }
+        throw new RuntimeException(teamColor + " King is not on the board");
+    }
+
     public boolean isInCheck(TeamColor teamColor) {
+        ChessPosition kingPosition = findKingPosition(teamColor);
         throw new RuntimeException("Not implemented");
     }
 
