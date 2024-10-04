@@ -98,13 +98,19 @@ public class ChessGame {
         if(!isValidMove){
             throw new InvalidMoveException("Invalid Move: Not a real move for the piece");
         }
+        ChessPiece.PieceType promo = move.getPromotionPiece();
         board.addPiece(start, null);
-        board.addPiece(end, piece);
+        if (promo == null) {
+            board.addPiece(end, piece);
+        }
+        else{
+            board.addPiece(end, new ChessPiece(turn, promo));
+        }
         if(turn == TeamColor.WHITE){
             turn = TeamColor.BLACK;
         }
         else{
-            turn = TeamColor.BLACK;
+            turn = TeamColor.WHITE;
         }
     }
 
@@ -126,11 +132,14 @@ public class ChessGame {
                 }
             }
         }
-        throw new RuntimeException(teamColor + " King is not on the board");
+        return null;
     }
 
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKingPosition(teamColor);
+        if (kingPosition == null){
+            return false;
+        }
         for(int i = 1; i < 9; i ++) {
             for (int j = 1; j < 9; j++) {
                 ChessPosition currPosition = new ChessPosition(i, j);
