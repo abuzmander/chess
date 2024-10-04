@@ -186,7 +186,7 @@ public class ChessGame {
         if (!isInCheck(turn)){
             return false;
         }
-        return true;
+        return !hasValidMoves(teamColor);
     }
 
     /**
