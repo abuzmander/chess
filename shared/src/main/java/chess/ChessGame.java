@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -83,6 +82,17 @@ public class ChessGame {
         ChessPiece piece = board.getPiece(start);
         if(piece.getTeamColor() != turn){
           throw new InvalidMoveException("Invalid Move: Moving the Wrong Team Color");
+        }
+        boolean isValidMove = false;
+        Collection <ChessMove> validMoves = validMoves(start);
+        for(ChessMove validMove : validMoves){
+            if (validMove == move) {
+                isValidMove = true;
+                break;
+            }
+        }
+        if(!isValidMove){
+            throw new InvalidMoveException("Invalid Move: Not a real move for the piece");
         }
     }
 
