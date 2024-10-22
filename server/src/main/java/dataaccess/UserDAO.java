@@ -5,7 +5,7 @@ import java.util.Collection;
 public interface UserDAO {
     void findNoUser(String username) throws DataAccessException;
     void findUserData(String username) throws DataAccessException;
-
+    void clear();
     void AddUserData(UserData data) throws DataAccessException;
 
 }
