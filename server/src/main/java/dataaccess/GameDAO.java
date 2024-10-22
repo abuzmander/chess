@@ -4,10 +4,10 @@ import model.GameData;
 import java.util.Collection;
 
 public interface GameDAO {
-    Collection<GameData> getGames() throws DataAccessException;
+    void createGame(GameData data) throws DataAccessException;
     GameData getGame(int gameId) throws DataAccessException;
-    void updateGame(ChessGame.TeamColor color, int gameId, String username) throws DataAccessException;
-    void CreateGame() throws DataAccessException;
-    void clear();
+    Collection<GameData> getGames() throws DataAccessException;
+    void updateGame(int gameId, ChessGame.TeamColor color, String username) throws DataAccessException;
+    void clearGames();
 
 }

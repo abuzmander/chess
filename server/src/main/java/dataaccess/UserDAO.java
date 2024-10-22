@@ -3,9 +3,7 @@ import model.UserData;
 
 import java.util.Collection;
 public interface UserDAO {
-    void findNoUser(String username) throws DataAccessException;
-    void findUserData(String username) throws DataAccessException;
-    void clear();
-    void AddUserData(UserData data) throws DataAccessException;
-
+    UserData getUser(String username) throws DataAccessException;
+    void CreateUser(UserData data) throws DataAccessException;
+    void clearUsers();
 }
