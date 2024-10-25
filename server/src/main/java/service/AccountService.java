@@ -5,10 +5,8 @@ import dataaccess.UserDAO;
 import model.UserData;
 import model.AuthData;
 import exceptions.ResponseException;
-
 import java.util.Objects;
 import java.util.UUID;
-
 import request.LogoutRequest;
 import response.Error;
 import response.LoginResult;
