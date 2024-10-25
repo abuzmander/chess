@@ -21,7 +21,6 @@ import java.util.Collection;
 public class GameService {
     private final AuthDAO authDA;
     private final GameDAO gameDA;
-    private int currID = 0;
 
     public GameService(AuthDAO authDA, UserDAO userDA, GameDAO gameDA) {
         this.authDA = authDA;
@@ -41,9 +40,8 @@ public class GameService {
         if (authData == null){
             throw new ResponseException(401, new Error("Error: unauthorized"));
         }
-        GameData gameData =new GameData(currID++, null, null, request.gameName(), new ChessGame());
-        gameDA.createGame(gameData);
-        return new CreateGameResult(gameData.gameID());
+        int gameID = gameDA.createGame(request.gameName());
+        return new CreateGameResult(gameID);
     }
 
     public JoinGameResult joinGame(JoinGameRequest request) throws ResponseException, DataAccessException {
@@ -52,22 +50,22 @@ public class GameService {
             throw new ResponseException(401, new Error("Error: unauthorized"));
         }
         String username = authData.username();
-        GameData gameData = gameDA.getGame(request.GameID());
+        GameData gameData = gameDA.getGame(request.gameID());
         GameData newGameData = null;
         if (gameData == null){
             throw new ResponseException(400, new Error("Error: bad request"));
         }
-        if (request.color() == ChessGame.TeamColor.WHITE){
+        if (request.playerColor() == ChessGame.TeamColor.WHITE){
             if(gameData.whiteUsername() != null) {
-                throw new ResponseException(400, new Error("Error: bad request"));
+                throw new ResponseException(403, new Error("Error: already taken"));
             }
             else{
                 newGameData = new GameData(gameData.gameID(), username, gameData.blackUsername(), gameData.gameName(), gameData.game());
             }
         }
-        if (request.color() == ChessGame.TeamColor.BLACK){
+        if (request.playerColor() == ChessGame.TeamColor.BLACK){
             if(gameData.blackUsername() != null){
-                throw new ResponseException(400, new Error("Error: bad request"));
+                throw new ResponseException(403, new Error("Error: already taken"));
             }
             else{
                 newGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), username, gameData.gameName(), gameData.game());

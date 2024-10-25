@@ -7,10 +7,7 @@ import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import exceptions.ResponseException;
 import request.CreateGameRequest;
-import request.RegisterRequest;
-import response.RegisterResult;
-import service.AccountService;
-import service.ClearService;
+import response.CreateGameResult;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -27,14 +24,14 @@ public class CreateGameHandler {
     public Object handleRequest(Request req, Response res) throws ResponseException, DataAccessException {
         Gson gson = new Gson();
         CreateGameRequest request = new CreateGameRequest(req.headers("authorization"), gson.fromJson(req.body(), CreateGameRequest.class).gameName());
-        if (request.username() == null || request.password() == null || request.email() == null) {
+        if (request.gameName() == null) {
             res.status(400);
             res.body(gson.toJson(Map.of("message", "Error: bad request")));
             return gson.toJson(Map.of("message", "Error: bad request"));
         }
         try {
             res.status(200);
-            RegisterResult result = service.register(request);
+            CreateGameResult result = service.createGame(request);
             return gson.toJson(result);
         } catch (DataAccessException punk) {
             res.status(500);

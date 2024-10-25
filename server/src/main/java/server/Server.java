@@ -40,6 +40,10 @@ public class Server {
                 (new CreateGameHandler(authDA, userDA, gameDA)).handleRequest(req,
                         res));
 
+        Spark.put("/game", (req, res) ->
+                (new JoinGameHandler(authDA, userDA, gameDA)).handleRequest(req,
+                        res));
+
 
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
