@@ -24,6 +24,21 @@ public class Server {
                 (new RegisterHandler(authDA, userDA)).handleRequest(req,
                         res));
 
+        Spark.delete("/session", (req, res) ->
+                (new LogoutHandler(authDA, userDA)).handleRequest(req,
+                        res));
+
+        Spark.post("/session", (req, res) ->
+                (new LoginHandler(authDA, userDA)).handleRequest(req,
+                        res));
+
+        Spark.get("/game", (req, res) ->
+                (new ListGamesHandler(authDA, userDA, gameDA)).handleRequest(req,
+                        res));
+
+        Spark.post("/game", (req, res) ->
+                (new CreateGameHandler(authDA, userDA, gameDA)).handleRequest(req,
+                        res));
 
 
 

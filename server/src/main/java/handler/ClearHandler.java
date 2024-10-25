@@ -6,7 +6,7 @@ import spark.Response;
 import com.google.gson.Gson;
 import service.ClearService;
 
-
+import java.util.Map;
 
 
 public class ClearHandler{
@@ -16,8 +16,9 @@ public class ClearHandler{
     }
 
     public Object handleRequest(Request req, Response res){
+        Gson gson = new Gson();
         service.clear();
         res.status(200);
-        return "";
+        return "{}";
     }
 }

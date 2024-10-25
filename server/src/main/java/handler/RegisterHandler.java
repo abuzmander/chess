@@ -22,7 +22,6 @@ public class RegisterHandler {
         Gson gson = new Gson();
         RegisterRequest request = (RegisterRequest)gson.fromJson(req.body(), RegisterRequest.class);
         if (request.username() == null || request.password() == null || request.email() == null){
-            System.out.println("test");
             res.status(400);
             res.body(gson.toJson(Map.of("message", "Error: bad request")));
             return gson.toJson(Map.of("message", "Error: bad request"));
