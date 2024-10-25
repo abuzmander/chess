@@ -32,7 +32,7 @@ public class AccountService {
     public RegisterResult register(RegisterRequest request) throws DataAccessException, ResponseException {
 //        Need to add some Errors
         UserData userData = userDA.getUser(request.username());
-        if(userData.password() != null){
+        if(userData != null){
             throw new ResponseException(403, new Error("Error: already taken"));
         }
         userData = new UserData(request.username(), request.password(), request.email());
